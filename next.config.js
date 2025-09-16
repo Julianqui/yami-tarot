@@ -4,13 +4,7 @@ const nextConfig = {
   compiler: {
     styledComponents: true, // necesario para styled-components v6 con SSR
   },
-  experimental: {
-    // Asegurar compatibilidad con Vercel
-    esmExternals: 'loose',
-  },
-  // Configuración para Vercel
-  output: 'standalone',
-  // Asegurar que las rutas funcionen correctamente
+  // Configuración básica para Vercel
   trailingSlash: false,
   // Configuración de imágenes si las usas
   images: {
