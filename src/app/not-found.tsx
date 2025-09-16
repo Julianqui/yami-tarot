@@ -1,7 +1,7 @@
 'use client'
 
 import styled from 'styled-components'
-import Link from 'next/link'
+import { NextLinkButton } from '@/components/Button/Button'
 
 const Container = styled.main`
   min-height: 100vh;
@@ -45,27 +45,6 @@ const Subtitle = styled.p`
   opacity: 0.8;
 `
 
-const Button = styled(Link)`
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-  border: none;
-  color: white;
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  text-decoration: none;
-  display: inline-block;
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-`
 
 export default function NotFound() {
   return (
@@ -74,9 +53,9 @@ export default function NotFound() {
       <Subtitle>
         La página que buscas no existe en este universo místico
       </Subtitle>
-      <Button href="/">
+      <NextLinkButton href="/">
         Volver al Inicio
-      </Button>
+      </NextLinkButton>
     </Container>
   )
 }

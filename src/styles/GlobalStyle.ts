@@ -9,6 +9,10 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   html,
   body {
     max-width: 100vw;

@@ -1,6 +1,8 @@
 'use client'
 
 import styled from 'styled-components'
+import { NextLinkButton } from '@/components/Button/Button'
+import { Card } from '@/components/Card'
 
 const Container = styled.main`
   min-height: 100vh;
@@ -44,49 +46,19 @@ const Subtitle = styled.p`
   opacity: 0.8;
 `
 
-const Card = styled.div`
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  text-align: center;
-  max-width: 500px;
-`
-
-const Button = styled.button`
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-  border: none;
-  color: white;
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-`
 
 export default function Home() {
   return (
     <Container>
       <Title>🌙 Yami Tarot 🌙</Title>
-      <Card>
-        <Subtitle>
-          Descubre los secretos del universo a través de las cartas del tarot
-        </Subtitle>
-        <Button>
-          Comenzar Lectura
-        </Button>
-      </Card>
+      <Card
+        text="Descubre los secretos del universo a través de las cartas del tarot"
+        actions={
+          <NextLinkButton href="/reading">
+            Comenzar Lectura
+          </NextLinkButton>
+        }
+      />
     </Container>
   )
 }
