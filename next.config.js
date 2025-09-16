@@ -1,11 +1,8 @@
+// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   compiler: {
-    styledComponents: true,
+    styledComponents: true, // necesario para styled-components v6 con SSR
   },
-}
-
-module.exports = nextConfig
+};
+module.exports = nextConfig;
