@@ -130,7 +130,7 @@ export default function Home() {
           Soy tarotista profesional. Te hablo con la verdad y claridad.
         </BioText>
         <Inspirational>
-          "Las cartas no predicen el futuro, iluminan el camino para que tú lo construyas"
+          &ldquo;Las cartas no predicen el futuro, iluminan el camino para que tú lo construyas&rdquo;
         </Inspirational>
       </Bio>
       <Card
