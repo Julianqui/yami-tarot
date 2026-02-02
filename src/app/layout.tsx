@@ -4,7 +4,6 @@ import StyledComponentsRegistry from '@/components/StyledComponentsRegistry'
 import { GlobalStyle } from '@/styles/GlobalStyle'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { ScrollToTopButtonComponent } from '@/components/ScrollToTopButton'
-import { FloatingContactButtonComponent } from '@/components/FloatingContactButton'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,7 +26,6 @@ export default function RootLayout({
             {children}
           </ScrollToTop>
           <ScrollToTopButtonComponent />
-          <FloatingContactButtonComponent />
         </StyledComponentsRegistry>
       </body>
     </html>
