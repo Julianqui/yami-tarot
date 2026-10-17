@@ -23,8 +23,12 @@ const DATA_DIR = path.join(process.cwd(), 'data');
 const DATA_FILE = path.join(DATA_DIR, 'videos.json');
 export const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads');
 
-/** Ruta del índice dentro del store de Blob. */
-const BLOB_INDEX = 'videoteca/videos.json';
+/**
+ * Prefijo del índice dentro del store de Blob. Cada escritura crea un archivo
+ * nuevo y borra los anteriores: así la lectura nunca cae en una versión vieja
+ * cacheada por el CDN (sobreescribir la misma URL sí quedaba cacheado).
+ */
+const BLOB_INDEX_PREFIX = 'videoteca/index-';
 
 /**
  * En Vercel el disco es de solo lectura, así que la videoteca vive en Blob.
@@ -44,14 +48,20 @@ async function ensureStore() {
   }
 }
 
+/** Índices en Blob, del más nuevo al más viejo. */
+async function listIndexBlobs() {
+  const { blobs } = await list({ prefix: BLOB_INDEX_PREFIX });
+  return blobs.sort(
+    (a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime(),
+  );
+}
+
 async function readIndex(): Promise<Video[]> {
   if (usingBlob()) {
     try {
-      const { blobs } = await list({ prefix: BLOB_INDEX, limit: 1 });
-      const index = blobs.find((b) => b.pathname === BLOB_INDEX);
-      if (!index) return [];
-      // El CDN cachea por URL: le agregamos un parámetro para leer siempre lo último.
-      const response = await fetch(`${index.url}?t=${Date.now()}`, { cache: 'no-store' });
+      const [newest] = await listIndexBlobs();
+      if (!newest) return [];
+      const response = await fetch(newest.url, { cache: 'no-store' });
       if (!response.ok) return [];
       const parsed = (await response.json()) as Video[];
       return Array.isArray(parsed) ? parsed : [];
@@ -71,13 +81,19 @@ async function readIndex(): Promise<Video[]> {
 
 async function writeIndex(videos: Video[]) {
   if (usingBlob()) {
-    await put(BLOB_INDEX, JSON.stringify(videos, null, 2), {
-      access: 'public',
-      addRandomSuffix: false,
-      allowOverwrite: true,
-      contentType: 'application/json',
-      cacheControlMaxAge: 0,
-    });
+    const previous = await listIndexBlobs();
+    const fresh = await put(
+      `${BLOB_INDEX_PREFIX}${Date.now()}.json`,
+      JSON.stringify(videos, null, 2),
+      {
+        access: 'public',
+        addRandomSuffix: true,
+        contentType: 'application/json',
+        cacheControlMaxAge: 0,
+      },
+    );
+    const stale = previous.filter((blob) => blob.url !== fresh.url).map((blob) => blob.url);
+    if (stale.length > 0) await del(stale).catch(() => {});
     return;
   }
   await ensureStore();
