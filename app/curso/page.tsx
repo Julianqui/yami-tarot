@@ -7,13 +7,17 @@ import { Reveal } from '../components/reveal';
 export const metadata = {
   title: 'Curso de Tarot · Yami Tarot',
   description:
-    'Curso de tarot desde cero con Yami: los 22 arcanos mayores, cómo armar una tirada y cómo interpretarla.',
+    'Curso de tarot desde cero con Yami: los 78 arcanos, cómo armar una tirada y cómo interpretarla.',
 };
 
 const modules = [
   {
-    title: 'Los arcanos mayores',
-    body: 'Las 22 cartas una por una: qué muestran, qué piden y qué cambia cuando salen invertidas.',
+    title: 'Los 22 arcanos mayores',
+    body: 'Carta por carta: qué muestran, qué piden y qué cambia cuando salen invertidas.',
+  },
+  {
+    title: 'Los 56 arcanos menores',
+    body: 'Los cuatro palos —oros, copas, espadas y bastos—, las figuras y cómo leer el mazo completo.',
   },
   {
     title: 'Armar una tirada',
@@ -55,9 +59,9 @@ export default function CursoPage() {
               <span className="gilded">desde cero.</span>
             </h1>
             <p className="mt-6 max-w-[48ch] text-[1.08rem] leading-[1.65] text-muted">
-              Aprendé a leer tus propias cartas: los 22 arcanos mayores, cómo armar una tirada y
-              cómo interpretarla sin quedarte con la parte fea. Clases grabadas, a tu ritmo, con
-              material para descargar.
+              Aprendé a leer tus propias cartas: los 78 arcanos —los 22 mayores y los 56
+              menores—, cómo armar una tirada y cómo interpretarla sin quedarte con la parte fea.
+              Clases grabadas, a tu ritmo, con material para descargar.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -70,7 +74,7 @@ export default function CursoPage() {
             </div>
 
             <ul className="mt-8 flex flex-wrap gap-2">
-              {['Online', 'Clases grabadas', 'Material descargable', 'Sin fecha límite'].map(
+              {['78 arcanos', 'Online', 'Clases grabadas', 'Material descargable'].map(
                 (item) => (
                   <li key={item} className="chip">
                     {item}
@@ -112,7 +116,7 @@ export default function CursoPage() {
           <div className="slot mt-6 p-6 pt-12" data-note="Detalles del curso — confirmar con Yami">
             <p className="note">
               Falta definir: cuántas clases son, cuánto dura cada una, si hay encuentros en vivo o
-              es todo grabado, si entrega certificado y el precio final.
+              es todo grabado, y si entrega certificado.
             </p>
           </div>
         </section>

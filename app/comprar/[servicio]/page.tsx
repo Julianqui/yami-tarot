@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { money } from '@/lib/format';
 import { findProduct, products } from '@/lib/products';
-import { site, whatsappLink } from '@/lib/site';
+import { paypalLink, site, whatsappLink } from '@/lib/site';
 import { CopyAlias } from './copy-alias';
 
 export function generateStaticParams() {
@@ -24,8 +24,8 @@ export default async function ComprarPage({ params }: { params: Promise<{ servic
 
   const steps = [
     {
-      title: 'Transferí el importe',
-      body: `Mandá ${money(product.price)} al alias de Mercado Pago de Yami. Podés hacerlo desde cualquier banco o billetera.`,
+      title: 'Pagá el importe',
+      body: `Mandá ${money(product.price)} al alias de Mercado Pago de Yami, desde cualquier banco o billetera. Si estás fuera de Argentina, podés usar PayPal.`,
     },
     {
       title: 'Mandale el comprobante',
@@ -56,14 +56,30 @@ export default async function ComprarPage({ params }: { params: Promise<{ servic
             {product.description}
           </p>
 
-          <div className="mt-8 flex flex-wrap items-end justify-between gap-6 border-t border-line pt-8">
-            <div>
-              <p className="mono">Total a transferir</p>
-              <p className="h-display gilded mt-2 text-[clamp(2.4rem,7vw,3.6rem)]">
-                {money(product.price)}
-              </p>
+          <div className="mt-8 border-t border-line pt-8">
+            <p className="mono">Total</p>
+            <p className="h-display gilded mt-2 text-[clamp(2.4rem,7vw,3.6rem)]">
+              {money(product.price)}
+            </p>
+
+            <div className="mt-7 grid gap-4 sm:grid-cols-2">
+              <CopyAlias alias={site.alias} />
+
+              <div>
+                <p className="mono">Desde el exterior</p>
+                <a
+                  href={paypalLink()}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="card card-hover mt-2 flex items-center justify-between gap-4 px-5 py-4"
+                >
+                  <span className="font-mono text-[1.05rem] tracking-[0.02em]">
+                    PayPal · @{site.paypal}
+                  </span>
+                  <span className="mono text-teal">Abrir</span>
+                </a>
+              </div>
             </div>
-            <CopyAlias alias={site.alias} />
           </div>
         </div>
 
@@ -82,7 +98,7 @@ export default async function ComprarPage({ params }: { params: Promise<{ servic
         <div className="mt-8 flex flex-wrap gap-3">
           <a
             href={whatsappLink(
-              `Hola Yami! Transferí por ${product.name} (${money(product.price)}). Te paso el comprobante.`,
+              `Hola Yami! Pagué ${product.name} (${money(product.price)}). Te paso el comprobante.`,
             )}
             target="_blank"
             rel="noreferrer"
@@ -98,8 +114,8 @@ export default async function ComprarPage({ params }: { params: Promise<{ servic
         </div>
 
         <p className="note mt-8 max-w-[62ch]">
-          El pago se hace por transferencia directa a la cuenta de Yami: este sitio no procesa
-          pagos ni guarda tus datos. Si preferís otro medio, escribile por WhatsApp al{' '}
+          El pago se hace directo a la cuenta de Yami, por Mercado Pago o PayPal: este sitio no
+          procesa pagos ni guarda tus datos. Si preferís otro medio, escribile por WhatsApp al{' '}
           <a href={whatsappLink()} target="_blank" rel="noreferrer" className="link-underline">
             +{site.whatsapp}
           </a>

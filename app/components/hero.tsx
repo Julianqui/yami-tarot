@@ -2,7 +2,7 @@
 import { ArcanaCard } from './arcana-card';
 import { Reveal } from './reveal';
 
-const facts = ['Sesiones por videollamada', 'Video privado en 48 h', 'Pago con Mercado Pago'];
+const facts = ['Sesiones por videollamada', 'Video privado en 48 h', 'Mercado Pago o PayPal'];
 
 export function Hero({ portrait }: { portrait: string | null }) {
   return (

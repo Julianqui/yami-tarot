@@ -21,13 +21,13 @@ export const CURRENCY = 'ARS';
 export const products: Product[] = [
   {
     id: 'lectura-express',
-    name: 'Lectura Express',
-    tagline: 'Una pregunta, una respuesta clara',
+    name: '3 Preguntas',
+    tagline: 'Tres dudas concretas, tres respuestas',
     description:
-      'Tirada de 3 cartas para una consulta concreta. Te llega en video privado dentro de las 48 h.',
-    price: 12000,
+      'Hacés tres preguntas puntuales y Yami te responde con una tirada para cada una, en video privado dentro de las 48 h.',
+    price: 9000,
     meta: 'Video privado · 48 h',
-    highlights: ['3 cartas', 'Audio + video', '1 pregunta'],
+    highlights: ['3 preguntas', 'Audio + video', 'Respuesta en 48 h'],
   },
   {
     id: 'lectura-profunda',
@@ -45,7 +45,7 @@ export const products: Product[] = [
     name: 'Curso de Tarot',
     tagline: 'Aprendé a leer tus propias cartas',
     description:
-      'Formación desde cero: los 22 arcanos mayores, cómo armar una tirada y cómo interpretarla sin miedo.',
+      'Formación desde cero sobre los 78 arcanos: los 22 mayores y los 56 menores, cómo armar una tirada y cómo interpretarla sin miedo.',
     price: 65000,
     meta: 'Online · clases grabadas',
     highlights: ['Desde cero', 'Material incluido', 'Acceso a los videos'],
@@ -57,7 +57,7 @@ export const products: Product[] = [
     tagline: 'Para abrir ciclo con intención',
     description:
       'Encuentro grupal online en cada luna nueva: meditación guiada, tirada colectiva y ritual de intención.',
-    price: 9000,
+    price: 15000,
     meta: 'Grupal · 1 h 30',
     highlights: ['Cupos limitados', 'Material descargable', 'Comunidad'],
   },

@@ -12,7 +12,7 @@ export function Services() {
       <SectionHead
         kicker="Servicios"
         title="Qué se puede reservar"
-        standfirst="Elegís el servicio, transferís al alias de Mercado Pago de Yami y le mandás el comprobante por WhatsApp. Después coordinan día y hora."
+        standfirst="Elegís el servicio, pagás por Mercado Pago o PayPal y le mandás el comprobante por WhatsApp. Después coordinan día y hora."
       />
 
       <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
