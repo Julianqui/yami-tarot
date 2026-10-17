@@ -5,6 +5,9 @@ import { products } from '@/lib/products';
 import { useCart } from '@/lib/cart-store';
 import { Reveal, SectionHead } from './reveal';
 
+/** Un color por servicio, para que la grilla no sea una pared gris. */
+const tints = ['#8b6dff', '#35c2b1', '#e8b765', '#ef7a9b', '#6d8bff', '#c98bff'];
+
 export function Services() {
   const add = useCart((s) => s.add);
 
@@ -19,21 +22,40 @@ export function Services() {
       <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {products.map((product, index) => (
           <Reveal key={product.id} delay={Math.min(index, 5) * 0.05} className="h-full">
-            <article className="card card-hover flex h-full flex-col p-6">
-              <div className="flex items-start justify-between gap-4">
+            <article className="card card-hover relative flex h-full flex-col overflow-hidden p-6">
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full opacity-40 blur-3xl"
+                style={{ background: tints[index % tints.length] }}
+              />
+              <span
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-px"
+                style={{
+                  background: `linear-gradient(90deg, transparent, ${tints[index % tints.length]}, transparent)`,
+                }}
+              />
+              <div className="relative flex items-start justify-between gap-4">
                 <h3 className="h-section text-[1.6rem]">{product.name}</h3>
                 {product.featured ? (
-                  <span className="mono rounded-full bg-surface-2 px-2.5 py-1 text-text">
+                  <span
+                    className="mono rounded-full px-2.5 py-1 text-night"
+                    style={{ background: tints[index % tints.length] }}
+                  >
                     Más elegida
                   </span>
                 ) : null}
               </div>
 
-              <p className="mono mt-3">{product.meta}</p>
+              <p className="mono relative mt-3" style={{ color: tints[index % tints.length] }}>
+                {product.meta}
+              </p>
 
-              <p className="mt-4 text-[0.97rem] leading-[1.6] text-muted">{product.description}</p>
+              <p className="relative mt-4 text-[0.97rem] leading-[1.6] text-muted">
+                {product.description}
+              </p>
 
-              <ul className="mt-5 flex flex-wrap gap-2">
+              <ul className="relative mt-5 flex flex-wrap gap-2">
                 {product.highlights.map((highlight) => (
                   <li key={highlight} className="chip text-[0.76rem]">
                     {highlight}
@@ -41,8 +63,8 @@ export function Services() {
                 ))}
               </ul>
 
-              <div className="mt-auto flex items-end justify-between gap-4 pt-7">
-                <span className="h-section text-[1.9rem]">{money(product.price)}</span>
+              <div className="relative mt-auto flex items-end justify-between gap-4 pt-7">
+                <span className="h-section gilded text-[1.9rem]">{money(product.price)}</span>
                 <button type="button" onClick={() => add(product.id)} className="btn btn-primary">
                   Agregar
                 </button>

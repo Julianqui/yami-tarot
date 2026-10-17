@@ -15,8 +15,10 @@ export function Process() {
       <ol className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, index) => (
           <Reveal as="li" key={step.title} delay={index * 0.07}>
-            <div className="card h-full p-6">
-              <span className="mono">{String(index + 1).padStart(2, '0')}</span>
+            <div className="card card-hover h-full p-6">
+              <span className="gilded text-[2rem] font-medium tracking-[-0.03em]">
+                {String(index + 1).padStart(2, '0')}
+              </span>
               <h3 className="h-section mt-5 text-[1.45rem]">{step.title}</h3>
               <p className="mt-2 text-[0.94rem] leading-[1.6] text-muted">{step.text}</p>
             </div>

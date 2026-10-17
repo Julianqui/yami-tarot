@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { CartDrawer } from './cart-drawer';
 import { SiteFooter } from './site-footer';
 import { SiteHeader } from './site-header';
+import { WhatsappFab } from './whatsapp-fab';
 
 /**
  * El panel y las pantallas de pago no necesitan la navegación de la landing
@@ -22,6 +23,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       {showHeader ? <CartDrawer /> : null}
       <main className="relative z-10">{children}</main>
       {showFooter ? <SiteFooter /> : null}
+      {showHeader ? <WhatsappFab /> : null}
     </>
   );
 }

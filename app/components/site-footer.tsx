@@ -3,15 +3,17 @@ import { instagramLink, site, whatsappLink } from '@/lib/site';
 export function SiteFooter() {
   return (
     <footer id="contacto" className="scroll-mt-24 px-[4vw] pb-10 pt-10">
-      <div className="card mx-auto w-[min(1200px,92vw)] px-7 py-14 sm:px-14 sm:py-20">
-        <span className="mono">Reservas</span>
-        <h2 className="h-display mt-6 text-[clamp(2.3rem,6vw,4.2rem)]">
+      <div className="card relative mx-auto w-[min(1200px,92vw)] overflow-hidden px-7 py-14 sm:px-14 sm:py-20">
+        <span aria-hidden className="aura -left-20 -top-24 h-[24rem] w-[24rem] bg-amethyst/30" />
+        <span aria-hidden className="aura -bottom-28 right-0 h-[22rem] w-[22rem] bg-accent/20" />
+        <span className="mono relative text-teal">Reservas</span>
+        <h2 className="h-display relative mt-6 text-[clamp(2.3rem,6vw,4.2rem)]">
           Las cartas ya están{' '}
           <br className="hidden sm:block" />
-          sobre la mesa.
+          <span className="gilded">sobre la mesa.</span>
         </h2>
 
-        <div className="mt-10 flex flex-wrap gap-3">
+        <div className="relative mt-10 flex flex-wrap gap-3">
           <a href="#servicios" className="btn btn-primary">
             Ver servicios
           </a>
@@ -20,7 +22,7 @@ export function SiteFooter() {
           </a>
         </div>
 
-        <dl className="mt-14 grid gap-6 border-t border-line pt-10 sm:grid-cols-3">
+        <dl className="relative mt-14 grid gap-6 border-t border-line pt-10 sm:grid-cols-3">
           {[
             ['WhatsApp', `+${site.whatsapp}`, whatsappLink()],
             ['Instagram', `@${site.instagram}`, instagramLink()],

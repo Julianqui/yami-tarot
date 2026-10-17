@@ -1,6 +1,7 @@
 import { portraitSrc } from '@/lib/assets';
 import { listVideos } from '@/lib/videos';
 import { About } from './components/about';
+import { ArcanasSection } from './components/arcanas-section';
 import { Faq } from './components/faq';
 import { Hero } from './components/hero';
 import { Process } from './components/process';
@@ -18,6 +19,7 @@ export default async function HomePage() {
     <>
       <Hero portrait={portrait} />
       <About />
+      <ArcanasSection />
       <Services />
       <Process />
       <VideosSection videos={videos} />

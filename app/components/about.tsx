@@ -1,12 +1,11 @@
-import { Reveal, SectionHead } from './reveal';
-import { TarotPlate } from './tarot-card';
+import { SectionHead } from './reveal';
 
 export function About() {
   return (
     <section id="sobre" className="mx-auto w-[min(1200px,92vw)] scroll-mt-24 py-20 sm:py-28">
       <SectionHead kicker="Sobre Yami" title="Quién lee las cartas" />
 
-      <div className="mt-12 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="grid gap-5">
           <div className="slot p-7 pt-12" data-note="Bio — reemplazar">
             <p className="text-[1.02rem] leading-[1.7] text-muted">
@@ -30,17 +29,11 @@ export function About() {
           </div>
         </div>
 
-        <div>
-          <Reveal>
-            <div className="grid grid-cols-3 gap-4">
-              <TarotPlate arcana="luna" />
-              <TarotPlate arcana="estrella" />
-              <TarotPlate arcana="sol" />
-            </div>
-          </Reveal>
-          <p className="note mt-5">
-            Ilustraciones hechas para el sitio. Si Yami prefiere, se reemplazan por fotos de su
-            propio mazo.
+        <div className="slot p-7 pt-12" data-note="Cómo es una sesión">
+          <p className="text-[1.02rem] leading-[1.7] text-muted">
+            Acá puede ir el paso a paso de una consulta contado por Yami: cómo arranca, qué se
+            pregunta, cuánto dura y con qué te vas. Dos párrafos cortos funcionan mejor que uno
+            largo.
           </p>
         </div>
       </div>

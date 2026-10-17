@@ -1,7 +1,7 @@
 /** Datos de contacto. Cambiá estos valores (o definí las env) y queda en todo el sitio. */
 export const site = {
   name: 'Yami Tarot',
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? '5491122334455',
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? '5491150235826',
   instagram: process.env.NEXT_PUBLIC_INSTAGRAM ?? 'yami.tarot',
   email: process.env.NEXT_PUBLIC_EMAIL ?? 'hola@yamitarot.com',
 };

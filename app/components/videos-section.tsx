@@ -44,7 +44,9 @@ export function VideosSection({ videos }: { videos: Video[] }) {
               type="button"
               onClick={() => setFilter(category)}
               className={`chip transition ${
-                filter === category ? 'border-text bg-text text-night' : 'hover:border-text/40'
+                filter === category
+                  ? 'border-amethyst bg-amethyst text-night'
+                  : 'hover:border-amethyst/50'
               }`}
             >
               {category}
@@ -90,14 +92,14 @@ export function VideosSection({ videos }: { videos: Video[] }) {
                       className="h-full w-full object-cover"
                     />
                   ) : null}
-                  <span className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-text/90 px-3 py-1.5 text-[0.75rem] text-night backdrop-blur">
+                  <span className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-amethyst px-3 py-1.5 text-[0.75rem] text-night backdrop-blur">
                     <span className="h-0 w-0 border-y-[4px] border-l-[6px] border-y-transparent border-l-night" />
                     Reproducir
                   </span>
                 </div>
 
                 <div className="p-5">
-                  <span className="mono">{video.category}</span>
+                  <span className="mono text-teal">{video.category}</span>
                   <h3 className="h-section mt-2 text-[1.3rem]">{video.title}</h3>
                   {video.description ? (
                     <p className="mt-2 line-clamp-2 text-[0.92rem] leading-[1.6] text-muted">
