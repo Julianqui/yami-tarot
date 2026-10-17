@@ -1,26 +1,169 @@
 @import "tailwindcss";
 
+@theme {
+  /* Oscuro neutro: negro cálido de fondo, superficies apenas más claras. */
+  --color-night: #0b0b0c;
+  --color-surface: #141416;
+  --color-surface-2: #1b1b1e;
+  --color-line: #2c2c31;
+  --color-text: #f3f2f0;
+  --color-muted: #a3a2a8;
+  --color-accent: #d9cdb8;
+
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+
+  --radius-card: 1.25rem;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-night);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-text);
+  color: var(--color-night);
+}
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--color-night); }
+::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-muted); }
+
+@layer components {
+  /* ---------- tipografía ---------- */
+  .h-display {
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+  }
+
+  .h-section {
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /* ---------- superficies ---------- */
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+  }
+  .card-hover:hover {
+    border-color: color-mix(in oklab, var(--color-text) 32%, transparent);
+    background: var(--color-surface-2);
+    transform: translateY(-2px);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.78rem;
+    color: var(--color-muted);
+    background: var(--color-surface);
+  }
+
+  /* ---------- acciones ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+      transform 0.25s ease;
+  }
+  .btn:active { transform: scale(0.985); }
+
+  .btn-primary {
+    background: var(--color-text);
+    color: var(--color-night);
+  }
+  .btn-primary:hover { background: var(--color-accent); }
+  .btn-primary:disabled { opacity: 0.45; }
+
+  .btn-ghost {
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+  .btn-ghost:hover { border-color: color-mix(in oklab, var(--color-text) 45%, transparent); }
+
+  .link-underline {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+    text-decoration-color: color-mix(in oklab, currentColor 30%, transparent);
+    transition: text-decoration-color 0.2s ease, color 0.2s ease;
+  }
+  .link-underline:hover {
+    color: var(--color-accent);
+    text-decoration-color: currentColor;
+  }
+
+  /* ---------- contenido pendiente ---------- */
+  .slot {
+    position: relative;
+    border: 1px dashed color-mix(in oklab, var(--color-accent) 40%, var(--color-line));
+    border-radius: var(--radius-card);
+    background: color-mix(in oklab, var(--color-accent) 4%, var(--color-surface));
+  }
+  .slot::after {
+    content: attr(data-note);
+    position: absolute;
+    left: 1.5rem;
+    top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .note {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+  .note code {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }
