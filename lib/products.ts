@@ -1,7 +1,6 @@
 /**
- * Catálogo de servicios. Es la ÚNICA fuente de verdad de los precios:
- * el carrito del cliente puede mandar cualquier cosa, el checkout siempre
- * recalcula contra esta lista antes de hablar con Mercado Pago.
+ * Catálogo de servicios. El pago es por transferencia: cada servicio tiene su
+ * propia página de compra con los datos de Yami.
  */
 export type Product = {
   id: string;
@@ -13,7 +12,8 @@ export type Product = {
   meta: string;
   highlights: string[];
   featured?: boolean;
-  emoji: string;
+  /** Si tiene página propia con más detalle. */
+  detailUrl?: string;
 };
 
 export const CURRENCY = 'ARS';
@@ -28,7 +28,6 @@ export const products: Product[] = [
     price: 12000,
     meta: 'Video privado · 48 h',
     highlights: ['3 cartas', 'Audio + video', '1 pregunta'],
-    emoji: '✦',
   },
   {
     id: 'lectura-profunda',
@@ -40,18 +39,17 @@ export const products: Product[] = [
     meta: 'En vivo · 50 min',
     highlights: ['Tirada extendida', 'Grabación incluida', 'Preguntas libres'],
     featured: true,
-    emoji: '☾',
   },
   {
-    id: 'carta-natal-tarot',
-    name: 'Tarot + Carta Natal',
-    tagline: 'Tu mapa astral leído con las cartas',
+    id: 'curso-tarot',
+    name: 'Curso de Tarot',
+    tagline: 'Aprendé a leer tus propias cartas',
     description:
-      'Cruzo tu carta natal con una tirada de 10 cartas y te armo un informe en PDF más una sesión de cierre.',
-    price: 42000,
-    meta: 'Informe PDF + 40 min',
-    highlights: ['Informe escrito', 'Tirada de 10', 'Sesión de cierre'],
-    emoji: '✺',
+      'Formación desde cero: los 22 arcanos mayores, cómo armar una tirada y cómo interpretarla sin miedo.',
+    price: 65000,
+    meta: 'Online · clases grabadas',
+    highlights: ['Desde cero', 'Material incluido', 'Acceso a los videos'],
+    detailUrl: '/curso',
   },
   {
     id: 'ritual-lunar',
@@ -62,7 +60,6 @@ export const products: Product[] = [
     price: 9000,
     meta: 'Grupal · 1 h 30',
     highlights: ['Cupos limitados', 'Material descargable', 'Comunidad'],
-    emoji: '◐',
   },
   {
     id: 'pack-tres-lecturas',
@@ -73,7 +70,6 @@ export const products: Product[] = [
     price: 72000,
     meta: '3 sesiones · 1 año de validez',
     highlights: ['Ahorrás 15%', 'Seguimiento', 'Agenda flexible'],
-    emoji: '✧',
   },
   {
     id: 'consulta-si-no',
@@ -84,7 +80,6 @@ export const products: Product[] = [
     price: 5000,
     meta: 'Audio · mismo día',
     highlights: ['1 carta', 'Respuesta en el día', 'Por WhatsApp'],
-    emoji: '◉',
   },
 ];
 

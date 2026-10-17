@@ -3,6 +3,7 @@ import { adminConfigured, isAdmin } from '@/lib/auth';
 import { listVideos, usingBlob } from '@/lib/videos';
 import { AdminLogin } from './admin-login';
 import { AdminPanel } from './admin-panel';
+import { PrivateLink } from './private-link';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,9 +28,11 @@ export default async function AdminPage() {
 
       <h1 className="h-display mt-8 text-[clamp(2.2rem,6vw,3.6rem)]">Videoteca</h1>
       <p className="mt-4 max-w-[56ch] text-[1.02rem] leading-[1.7] text-muted">
-        Subí archivos de video o pegá links de YouTube y Vimeo. Lo que cargues acá aparece en la
-        landing al instante.
+        Subí archivos de video o pegá links de YouTube y Vimeo. Los videos no se publican en la
+        landing: se ven solo en el link privado que le mandás por mail a quien compró.
       </p>
+
+      {authorized ? <PrivateLink slug={process.env.VIDEOS_SLUG} /> : null}
 
       <div className="mt-12">
         {!configured ? (

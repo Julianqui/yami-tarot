@@ -1,7 +1,6 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { CartDrawer } from './cart-drawer';
 import { SiteFooter } from './site-footer';
 import { SiteHeader } from './site-header';
 import { WhatsappFab } from './whatsapp-fab';
@@ -20,7 +19,6 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   return (
     <>
       {showHeader ? <SiteHeader /> : null}
-      {showHeader ? <CartDrawer /> : null}
       <main className="relative z-10">{children}</main>
       {showFooter ? <SiteFooter /> : null}
       {showHeader ? <WhatsappFab /> : null}

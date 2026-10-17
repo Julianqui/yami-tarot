@@ -4,6 +4,8 @@ export const site = {
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? '5491150235826',
   instagram: process.env.NEXT_PUBLIC_INSTAGRAM ?? 'yami.tarot',
   email: process.env.NEXT_PUBLIC_EMAIL ?? 'hola@yamitarot.com',
+  /** Alias de Mercado Pago donde se reciben las transferencias. */
+  alias: process.env.NEXT_PUBLIC_ALIAS ?? 'Yamilatarot22',
 };
 
 export const whatsappLink = (message = 'Hola Yami! Quiero reservar una lectura ✨') =>

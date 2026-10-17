@@ -1,22 +1,18 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { cartCount, useCart } from '@/lib/cart-store';
 
 const links = [
-  { href: '#sobre', label: 'Sobre Yami' },
-  { href: '#servicios', label: 'Servicios' },
-  { href: '#videos', label: 'Videos' },
-  { href: '#preguntas', label: 'Preguntas' },
+  { href: '/#sobre', label: 'Sobre Yami' },
+  { href: '/#servicios', label: 'Servicios' },
+  { href: '/#cartas', label: 'El mazo' },
+  { href: '/#preguntas', label: 'Preguntas' },
 ];
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const lines = useCart((s) => s.lines);
-  const openCart = useCart((s) => s.open);
-  const count = cartCount(lines);
-
   useEffect(() => {
     const close = () => setMenuOpen(false);
     window.addEventListener('hashchange', close);
@@ -26,9 +22,9 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-line/80 bg-night/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-[min(1200px,92vw)] items-center justify-between gap-6">
-        <a href="#inicio" className="text-[1.05rem] font-medium tracking-[-0.02em]">
+        <Link href="/" className="text-[1.05rem] font-medium tracking-[-0.02em]">
           Yami Tarot
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
           {links.map((link) => (
@@ -43,16 +39,9 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <button type="button" onClick={openCart} className="btn btn-ghost py-2 text-[0.88rem]">
-            Carrito
-            <span
-              className={`grid h-5 min-w-5 place-items-center rounded-full px-1 text-[0.7rem] ${
-                count > 0 ? 'bg-text text-night' : 'bg-surface-2 text-muted'
-              }`}
-            >
-              {count}
-            </span>
-          </button>
+          <Link href="/curso" className="btn btn-primary py-2 text-[0.85rem]">
+            Curso de Tarot
+          </Link>
 
           <button
             type="button"

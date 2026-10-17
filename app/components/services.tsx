@@ -1,22 +1,18 @@
-'use client';
-
+import Link from 'next/link';
 import { money } from '@/lib/format';
 import { products } from '@/lib/products';
-import { useCart } from '@/lib/cart-store';
 import { Reveal, SectionHead } from './reveal';
 
 /** Un color por servicio, para que la grilla no sea una pared gris. */
 const tints = ['#8b6dff', '#35c2b1', '#e8b765', '#ef7a9b', '#6d8bff', '#c98bff'];
 
 export function Services() {
-  const add = useCart((s) => s.add);
-
   return (
     <section id="servicios" className="mx-auto w-[min(1200px,92vw)] scroll-mt-24 py-20 sm:py-28">
       <SectionHead
         kicker="Servicios"
         title="Qué se puede reservar"
-        standfirst="Sumás lo que necesitás al carrito y pagás con Mercado Pago: tarjeta, débito, dinero en cuenta o efectivo. Después coordinan día y hora."
+        standfirst="Elegís el servicio, transferís al alias de Mercado Pago de Yami y le mandás el comprobante por WhatsApp. Después coordinan día y hora."
       />
 
       <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -63,11 +59,20 @@ export function Services() {
                 ))}
               </ul>
 
+              {product.detailUrl ? (
+                <Link
+                  href={product.detailUrl}
+                  className="relative mt-4 inline-block text-[0.85rem] text-muted underline decoration-muted/40 underline-offset-4 transition hover:text-text"
+                >
+                  Ver el programa completo
+                </Link>
+              ) : null}
+
               <div className="relative mt-auto flex items-end justify-between gap-4 pt-7">
                 <span className="h-section gilded text-[1.9rem]">{money(product.price)}</span>
-                <button type="button" onClick={() => add(product.id)} className="btn btn-primary">
-                  Agregar
-                </button>
+                <Link href={`/comprar/${product.id}`} className="btn btn-primary">
+                  Comprar
+                </Link>
               </div>
             </article>
           </Reveal>

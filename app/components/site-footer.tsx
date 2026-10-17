@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { instagramLink, site, whatsappLink } from '@/lib/site';
 
 export function SiteFooter() {
@@ -14,9 +15,9 @@ export function SiteFooter() {
         </h2>
 
         <div className="relative mt-10 flex flex-wrap gap-3">
-          <a href="#servicios" className="btn btn-primary">
+          <Link href="/#servicios" className="btn btn-primary">
             Ver servicios
-          </a>
+          </Link>
           <a href={whatsappLink()} target="_blank" rel="noreferrer" className="btn btn-ghost">
             Escribir por WhatsApp
           </a>
