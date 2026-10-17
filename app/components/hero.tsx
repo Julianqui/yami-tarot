@@ -85,15 +85,6 @@ export function Hero({ portrait }: { portrait: string | null }) {
           </Reveal>
         </div>
 
-        {!portrait ? (
-          <Reveal delay={0.2}>
-            <div className="slot mt-14 flex items-center justify-center p-6" data-note="Foto de Yami">
-              <p className="note max-w-[42ch] text-center">
-                Dejá una foto en <code>/public/yami.jpg</code> y entra sola en esta franja.
-              </p>
-            </div>
-          </Reveal>
-        ) : null}
       </div>
     </section>
   );
