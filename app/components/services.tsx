@@ -79,14 +79,6 @@ export function Services() {
         ))}
       </div>
 
-      <p className="note mt-8">
-        Precios y descripciones de ejemplo: se editan en <code>lib/products.ts</code>. ¿No sabés
-        cuál te sirve?{' '}
-        <a href="#contacto" className="link-underline text-text">
-          Escribile a Yami
-        </a>
-        .
-      </p>
     </section>
   );
 }
