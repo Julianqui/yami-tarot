@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import { SCOPE_ALL } from './access-scope';
 import { createJsonStore } from './json-store';
 
 export type Access = {
@@ -12,7 +13,7 @@ export type Access = {
   revokedAt?: string | null;
 };
 
-export const SCOPE_ALL = 'todo';
+export { SCOPE_ALL };
 
 const store = createJsonStore<Access>('accesos/index-', 'accesses.json');
 

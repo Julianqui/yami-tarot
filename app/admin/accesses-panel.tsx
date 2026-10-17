@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { SCOPE_ALL } from '@/lib/access-scope';
 import type { Access } from '@/lib/accesses';
-import { SCOPE_ALL } from '@/lib/accesses';
 
 const fieldClass =
   'mt-2 w-full rounded-xl border border-line bg-surface-2 px-3.5 py-2.5 font-sans text-[0.95rem] normal-case tracking-normal text-text outline-none transition focus:border-text';

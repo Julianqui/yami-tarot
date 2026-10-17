@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { isAdmin } from '@/lib/auth';
-import { SCOPE_ALL, createAccess, listAccesses } from '@/lib/accesses';
+import { SCOPE_ALL } from '@/lib/access-scope';
+import { createAccess, listAccesses } from '@/lib/accesses';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

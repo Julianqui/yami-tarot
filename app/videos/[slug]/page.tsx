@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
-import { SCOPE_ALL, findActiveAccess } from '@/lib/accesses';
+import { SCOPE_ALL } from '@/lib/access-scope';
+import { findActiveAccess } from '@/lib/accesses';
 import { listVideos } from '@/lib/videos';
 import { VideosSection } from '../../components/videos-section';
 
