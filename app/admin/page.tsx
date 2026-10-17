@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import { listAccesses } from '@/lib/accesses';
 import { adminConfigured, isAdmin } from '@/lib/auth';
 import { listVideos, usingBlob } from '@/lib/videos';
 import { AdminLogin } from './admin-login';
 import { AdminPanel } from './admin-panel';
+import { AccessesPanel } from './accesses-panel';
 import { PrivateLink } from './private-link';
 
 export const dynamic = 'force-dynamic';
@@ -16,6 +18,8 @@ export default async function AdminPage() {
   const configured = adminConfigured();
   const authorized = configured && (await isAdmin());
   const videos = authorized ? await listVideos() : [];
+  const accesses = authorized ? await listAccesses() : [];
+  const categories = Array.from(new Set(videos.map((v) => v.category).filter(Boolean)));
 
   return (
     <div className="mx-auto w-[min(1100px,92vw)] py-14 sm:py-20">
@@ -47,7 +51,10 @@ ADMIN_SECRET=cualquier-texto-largo-y-aleatorio`}
             </pre>
           </div>
         ) : authorized ? (
-          <AdminPanel videos={videos} useBlob={usingBlob()} />
+          <div className="grid gap-16">
+            <AccessesPanel accesses={accesses} categories={categories} />
+            <AdminPanel videos={videos} useBlob={usingBlob()} />
+          </div>
         ) : (
           <AdminLogin />
         )}
