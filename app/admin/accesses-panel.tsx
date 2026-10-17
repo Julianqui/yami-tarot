@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { SCOPE_ALL } from '@/lib/access-scope';
 import type { Access } from '@/lib/accesses';
 
+const OTHER = '__otra__';
+
 const fieldClass =
   'mt-2 w-full rounded-xl border border-line bg-surface-2 px-3.5 py-2.5 font-sans text-[0.95rem] normal-case tracking-normal text-text outline-none transition focus:border-text';
 
@@ -18,6 +20,7 @@ export function AccessesPanel({
   const router = useRouter();
   const [label, setLabel] = useState('');
   const [scope, setScope] = useState(SCOPE_ALL);
+  const [customScope, setCustomScope] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -32,11 +35,12 @@ export function AccessesPanel({
       const response = await fetch('/api/accesos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ label, scope }),
+        body: JSON.stringify({ label, scope: scope === OTHER ? customScope : scope }),
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data?.error ?? 'No se pudo generar el acceso.');
       setLabel('');
+      setCustomScope('');
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error inesperado.');
@@ -96,7 +100,17 @@ export function AccessesPanel({
                 {category}
               </option>
             ))}
+            <option value={OTHER}>Otra categoría…</option>
           </select>
+          {scope === OTHER ? (
+            <input
+              value={customScope}
+              onChange={(e) => setCustomScope(e.target.value)}
+              placeholder="Nombre de la categoría"
+              required
+              className={fieldClass}
+            />
+          ) : null}
         </label>
 
         <button type="submit" disabled={busy} className="btn btn-primary self-end">

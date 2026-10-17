@@ -4,6 +4,7 @@
 import { upload } from '@vercel/blob/client';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
+import { DEFAULT_CATEGORIES } from '@/lib/categories';
 import type { Video } from '@/lib/videos';
 
 type Mode = 'file' | 'link';
@@ -187,7 +188,17 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
 
           <label className="mono">
             Categoría
-            <input name="category" defaultValue="Tirada semanal" className={field} />
+            <input
+              name="category"
+              defaultValue="Tirada semanal"
+              list="categorias-sugeridas"
+              className={field}
+            />
+            <datalist id="categorias-sugeridas">
+              {DEFAULT_CATEGORIES.map((category) => (
+                <option key={category} value={category} />
+              ))}
+            </datalist>
           </label>
 
           <label className="mono sm:col-span-2">

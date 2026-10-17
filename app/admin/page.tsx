@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { listAccesses } from '@/lib/accesses';
+import { mergeCategories } from '@/lib/categories';
 import { adminConfigured, isAdmin } from '@/lib/auth';
 import { listVideos, usingBlob } from '@/lib/videos';
 import { AdminLogin } from './admin-login';
@@ -19,7 +20,7 @@ export default async function AdminPage() {
   const authorized = configured && (await isAdmin());
   const videos = authorized ? await listVideos() : [];
   const accesses = authorized ? await listAccesses() : [];
-  const categories = Array.from(new Set(videos.map((v) => v.category).filter(Boolean)));
+  const categories = mergeCategories(videos.map((v) => v.category));
 
   return (
     <div className="mx-auto w-[min(1100px,92vw)] py-14 sm:py-20">
