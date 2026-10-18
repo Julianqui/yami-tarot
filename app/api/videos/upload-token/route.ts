@@ -31,6 +31,7 @@ export async function POST(request: Request) {
             'image/png',
             'image/webp',
             'image/avif',
+            'application/pdf',
           ],
           maximumSizeInBytes: MAX_MB * 1024 * 1024,
           addRandomSuffix: true,

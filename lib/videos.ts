@@ -6,8 +6,13 @@ import { createJsonStore, usingBlob } from './json-store';
 
 export type VideoSource = 'file' | 'youtube' | 'vimeo' | 'url';
 
+/** Un video para reproducir, o material descargable (PDF, imagen). */
+export type ItemKind = 'video' | 'material';
+
 export type Video = {
   id: string;
+  /** Los items viejos no tienen el campo: se asumen videos. */
+  kind?: ItemKind;
   title: string;
   description: string;
   /** Etiqueta libre: "Tirada semanal", "Signos", "Rituales"... */
@@ -25,6 +30,10 @@ export const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads');
 const store = createJsonStore<Video>('videoteca/index-', 'videos.json');
 
 export { usingBlob };
+
+export function isMaterial(item: Video): boolean {
+  return item.kind === 'material';
+}
 
 export async function listVideos(): Promise<Video[]> {
   const videos = await store.read();

@@ -11,6 +11,7 @@ export const dynamic = 'force-dynamic';
 const MAX_MB = Number(process.env.MAX_UPLOAD_MB ?? 300);
 const ALLOWED_EXT = new Set(['mp4', 'webm', 'mov', 'm4v']);
 const ALLOWED_IMAGE_EXT = new Set(['jpg', 'jpeg', 'png', 'webp', 'avif']);
+const ALLOWED_MATERIAL_EXT = new Set(['pdf', 'jpg', 'jpeg', 'png', 'webp']);
 
 export async function GET() {
   const videos = await listVideos();
@@ -36,6 +37,7 @@ async function storeFile(file: File, allowed: Set<string>, prefix: string) {
 /** Alta cuando el archivo ya se subió a Blob desde el navegador. */
 async function createFromJson(request: Request) {
   const body = (await request.json()) as {
+    kind?: 'video' | 'material';
     title?: string;
     description?: string;
     category?: string;
@@ -55,6 +57,7 @@ async function createFromJson(request: Request) {
 
   if (body.blobUrl) {
     const video = await addVideo({
+      kind: body.kind === 'material' ? 'material' : 'video',
       title,
       description,
       category,
@@ -119,6 +122,7 @@ export async function POST(request: Request) {
   const description = String(form.get('description') ?? '').trim();
   const category = String(form.get('category') ?? '').trim() || 'Tirada';
   const link = String(form.get('url') ?? '').trim();
+  const kind = String(form.get('kind') ?? 'video') === 'material' ? 'material' : 'video';
   const file = form.get('file');
   const posterFile = form.get('poster');
 
@@ -133,8 +137,20 @@ export async function POST(request: Request) {
     }
 
     if (file instanceof File && file.size > 0) {
-      const src = await storeFile(file, ALLOWED_EXT, 'video');
-      const video = await addVideo({ title, description, category, source: 'file', src, poster });
+      const src = await storeFile(
+        file,
+        kind === 'material' ? ALLOWED_MATERIAL_EXT : ALLOWED_EXT,
+        kind,
+      );
+      const video = await addVideo({
+        kind,
+        title,
+        description,
+        category,
+        source: 'file',
+        src,
+        poster,
+      });
       return NextResponse.json({ video }, { status: 201 });
     }
 

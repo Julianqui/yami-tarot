@@ -7,7 +7,7 @@ import { useRef, useState } from 'react';
 import { DEFAULT_CATEGORIES } from '@/lib/categories';
 import type { Video } from '@/lib/videos';
 
-type Mode = 'file' | 'link';
+type Mode = 'file' | 'link' | 'material';
 
 const field =
   'mt-2 w-full rounded-xl border border-line bg-surface-2 px-3.5 py-2.5 font-sans text-[0.95rem] normal-case tracking-normal text-text outline-none transition focus:border-text';
@@ -33,9 +33,9 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
       let blobUrl: string | undefined;
       let posterUrl: string | undefined;
 
-      if (mode === 'file') {
+      if (mode === 'file' || mode === 'material') {
         if (!(file instanceof File) || file.size === 0) {
-          throw new Error('Elegí un archivo de video.');
+          throw new Error(mode === 'material' ? 'Elegí un PDF o una imagen.' : 'Elegí un archivo de video.');
         }
         const uploaded = await upload(file.name, file, {
           access: 'public',
@@ -58,6 +58,7 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          kind: mode === 'material' ? 'material' : 'video',
           title: data.get('title'),
           description: data.get('description'),
           category: data.get('category'),
@@ -85,8 +86,9 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
   /** En local subimos con XHR para poder mostrar el progreso: los videos pesan. */
   const submitToDisk = (form: HTMLFormElement) => {
     const data = new FormData(form);
-    if (mode === 'file') data.delete('url');
-    else data.delete('file');
+    if (mode === 'link') data.delete('file');
+    else data.delete('url');
+    data.set('kind', mode === 'material' ? 'material' : 'video');
 
     setMessage(null);
     setProgress(0);
@@ -163,8 +165,9 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
         <div className="mt-6 flex flex-wrap gap-2">
           {(
             [
-              { value: 'file', label: 'Archivo' },
-              { value: 'link', label: 'Link' },
+              { value: 'file', label: 'Video (archivo)' },
+              { value: 'link', label: 'Video (link)' },
+              { value: 'material', label: 'Material (PDF)' },
             ] as const
           ).map((option) => (
             <button
@@ -206,7 +209,18 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
             <textarea name="description" rows={3} className={`${field} resize-y`} />
           </label>
 
-          {mode === 'file' ? (
+          {mode === 'material' ? (
+            <label className="mono sm:col-span-2">
+              Archivo (.pdf, .jpg, .png)
+              <input
+                name="file"
+                type="file"
+                accept="application/pdf,image/jpeg,image/png,image/webp"
+                required
+                className="mt-2 w-full rounded-xl border border-dashed border-line bg-surface-2 p-4 font-sans text-[0.88rem] normal-case tracking-normal text-muted file:mr-4 file:rounded-full file:border-0 file:bg-text file:px-3.5 file:py-1.5 file:font-sans file:text-[0.78rem] file:text-night"
+              />
+            </label>
+          ) : mode === 'file' ? (
             <label className="mono sm:col-span-2">
               Archivo de video (.mp4, .webm, .mov)
               <input
@@ -229,6 +243,7 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
             </label>
           )}
 
+          {mode === 'material' ? null : (
           <label className="mono sm:col-span-2">
             Miniatura (opcional). Si no subís ninguna, se usa el primer frame.
             <input
@@ -238,6 +253,7 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
               className="mt-2 w-full rounded-xl border border-dashed border-line bg-surface-2 p-4 font-sans text-[0.88rem] normal-case tracking-normal text-muted file:mr-4 file:rounded-full file:border-0 file:bg-text file:px-3.5 file:py-1.5 file:font-sans file:text-[0.78rem] file:text-night"
             />
           </label>
+          )}
         </div>
 
         {progress !== null ? (
@@ -260,7 +276,7 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
         ) : null}
 
         <button type="submit" disabled={progress !== null} className="btn btn-primary mt-7">
-          Publicar video
+          {mode === 'material' ? 'Publicar material' : 'Publicar video'}
         </button>
       </form>
 
@@ -276,8 +292,12 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
             {videos.map((video, index) => (
               <li key={video.id} className="card mt-3 flex flex-wrap items-center gap-5 p-4">
                 <span className="mono">{String(index + 1).padStart(2, '0')}</span>
-                <div className="h-14 w-24 shrink-0 overflow-hidden rounded-xl bg-surface-2">
-                  {video.poster ? (
+                <div className="grid h-14 w-24 shrink-0 place-items-center overflow-hidden rounded-xl bg-surface-2">
+                  {video.kind === 'material' ? (
+                    <span className="font-mono text-[0.7rem] text-accent">
+                      {video.src.toLowerCase().endsWith('.pdf') ? 'PDF' : 'IMG'}
+                    </span>
+                  ) : video.poster ? (
                     <img src={video.poster} alt="" className="h-full w-full object-cover" />
                   ) : video.source === 'file' || video.source === 'url' ? (
                     <video src={video.src} muted preload="metadata" className="h-full w-full object-cover" />
@@ -287,7 +307,7 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
                 <div className="min-w-[12rem] flex-1">
                   <p className="text-[1.02rem] font-medium tracking-[-0.01em]">{video.title}</p>
                   <p className="mono mt-1">
-                    {video.category} · {video.source}
+                    {video.category} · {video.kind === 'material' ? 'material' : video.source}
                   </p>
                 </div>
 

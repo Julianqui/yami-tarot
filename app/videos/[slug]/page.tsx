@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation';
 import { SCOPE_ALL } from '@/lib/access-scope';
 import { findActiveAccess } from '@/lib/accesses';
-import { listVideos } from '@/lib/videos';
+import { isMaterial, listVideos } from '@/lib/videos';
+import { MaterialsList } from '../../components/materials-list';
 import { VideosSection } from '../../components/videos-section';
 
 export const dynamic = 'force-dynamic';
@@ -30,7 +31,9 @@ export default async function VideosPrivadosPage({
 
   const all = await listVideos();
   const scope = access?.scope ?? SCOPE_ALL;
-  const videos = scope === SCOPE_ALL ? all : all.filter((video) => video.category === scope);
+  const visible = scope === SCOPE_ALL ? all : all.filter((item) => item.category === scope);
+  const videos = visible.filter((item) => !isMaterial(item));
+  const materials = visible.filter(isMaterial);
 
   return (
     <div className="mx-auto w-[min(1200px,92vw)] py-12 sm:py-16">
@@ -44,8 +47,9 @@ export default async function VideosPrivadosPage({
       </div>
 
       <VideosSection videos={videos} />
+      <MaterialsList items={materials} />
 
-      {videos.length === 0 ? (
+      {visible.length === 0 ? (
         <p className="note mt-4">
           Todavía no hay videos publicados en esta categoría. Cuando Yami los suba, aparecen acá
           con este mismo link.
