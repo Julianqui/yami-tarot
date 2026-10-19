@@ -19,8 +19,21 @@ export function usingR2(): boolean {
   );
 }
 
+/** Bucket público: solo archivos que se sirven al navegador (videos, PDFs). */
 export function r2Bucket(): string {
   return process.env.R2_BUCKET ?? '';
+}
+
+/**
+ * Bucket privado: índices, accesos y cualquier dato que no debe poder leerse
+ * desde afuera. Si no está configurado, cae al público (y lo avisamos).
+ */
+export function r2DataBucket(): string {
+  return process.env.R2_PRIVATE_BUCKET || r2Bucket();
+}
+
+export function usingPrivateBucket(): boolean {
+  return Boolean(process.env.R2_PRIVATE_BUCKET);
 }
 
 /** Base pública desde donde se sirven los archivos (r2.dev o dominio propio). */
@@ -59,7 +72,7 @@ export async function signUpload(key: string, contentType: string, expiresIn = 3
 export async function putText(key: string, body: string, contentType = 'application/json') {
   await r2Client().send(
     new PutObjectCommand({
-      Bucket: r2Bucket(),
+      Bucket: r2DataBucket(),
       Key: key,
       Body: body,
       ContentType: contentType,
@@ -71,7 +84,7 @@ export async function putText(key: string, body: string, contentType = 'applicat
 export async function getText(key: string): Promise<string | null> {
   try {
     const result = await r2Client().send(
-      new GetObjectCommand({ Bucket: r2Bucket(), Key: key }),
+      new GetObjectCommand({ Bucket: r2DataBucket(), Key: key }),
     );
     return (await result.Body?.transformToString()) ?? null;
   } catch {

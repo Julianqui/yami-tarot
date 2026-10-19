@@ -7,6 +7,8 @@ import { listVideos, usingBlob } from '@/lib/videos';
 import { AdminLogin } from './admin-login';
 import { AdminPanel } from './admin-panel';
 import { AccessesPanel } from './accesses-panel';
+import { AdminMenu } from './admin-menu';
+
 import { PrivateLink } from './private-link';
 
 export const dynamic = 'force-dynamic';
@@ -27,9 +29,13 @@ export default async function AdminPage() {
     <div className="mx-auto w-[min(1100px,92vw)] py-14 sm:py-20">
       <div className="flex items-center justify-between gap-4">
         <span className="mono">Panel privado</span>
-        <Link href="/" className="btn btn-ghost px-4 py-2 text-[0.85rem]">
-          Ver el sitio
-        </Link>
+        {authorized ? (
+          <AdminMenu />
+        ) : (
+          <Link href="/" className="btn btn-ghost px-4 py-2 text-[0.85rem]">
+            Ver el sitio
+          </Link>
+        )}
       </div>
 
       <h1 className="h-display mt-8 text-[clamp(2.2rem,6vw,3.6rem)]">Videoteca</h1>

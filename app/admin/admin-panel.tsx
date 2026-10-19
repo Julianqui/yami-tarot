@@ -193,19 +193,12 @@ export function AdminPanel({
     }
   };
 
-  const logout = async () => {
-    await fetch('/api/admin/login', { method: 'DELETE' });
-    router.refresh();
-  };
-
   return (
     <div className="grid gap-14">
       <form ref={formRef} onSubmit={submit} className="card p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-line pb-5">
           <h2 className="h-section text-[1.7rem]">Subir un video</h2>
-          <button type="button" onClick={logout} className="btn btn-ghost px-4 py-1.5 text-[0.82rem]">
-            Salir
-          </button>
+
         </div>
 
         <div className="mt-6 flex flex-wrap gap-2">

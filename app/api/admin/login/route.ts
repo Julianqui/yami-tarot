@@ -19,11 +19,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Cuerpo inválido.' }, { status: 400 });
   }
 
-  if (!isValidPassword(password)) {
+  if (!(await isValidPassword(password))) {
     return NextResponse.json({ error: 'Contraseña incorrecta.' }, { status: 401 });
   }
 
-  const token = sessionToken();
+  const token = await sessionToken();
   if (!token) {
     return NextResponse.json({ error: 'Panel no configurado.' }, { status: 503 });
   }
