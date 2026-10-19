@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { del } from '@vercel/blob';
 import { createJsonStore, usingBlob } from './json-store';
+import { deleteKey, keyFromUrl, usingR2 } from './r2';
 
 export type VideoSource = 'file' | 'youtube' | 'vimeo' | 'url';
 
@@ -69,7 +70,18 @@ export async function deleteVideo(id: string): Promise<boolean> {
   for (const location of ownUploads) {
     if (location.startsWith('/uploads/')) {
       await fs.unlink(path.join(UPLOAD_DIR, path.basename(location))).catch(() => {});
-    } else if (usingBlob() && location.includes('.blob.vercel-storage.com/')) {
+      continue;
+    }
+
+    if (usingR2()) {
+      const key = keyFromUrl(location);
+      if (key) {
+        await deleteKey(key);
+        continue;
+      }
+    }
+
+    if (location.includes('.blob.vercel-storage.com/')) {
       await del(location).catch(() => {});
     }
   }

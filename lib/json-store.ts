@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { del, list, put } from '@vercel/blob';
+import { getText, putText, usingR2 } from './r2';
 
 /**
  * Guarda un JSON chico (índice de videos, accesos) en Vercel Blob cuando hay
@@ -25,6 +26,19 @@ export function createJsonStore<T>(blobPrefix: string, localFile: string) {
   }
 
   async function read(): Promise<T[]> {
+    // R2 permite leer y sobreescribir la misma clave sin quedar cacheado,
+    // así que el índice es un solo archivo en vez de uno nuevo por cambio.
+    if (usingR2()) {
+      const raw = await getText(`${blobPrefix}index.json`);
+      if (!raw) return [];
+      try {
+        const parsed = JSON.parse(raw) as T[];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
     if (usingBlob()) {
       try {
         const [newest] = await listBlobs();
@@ -47,6 +61,11 @@ export function createJsonStore<T>(blobPrefix: string, localFile: string) {
   }
 
   async function write(items: T[]): Promise<void> {
+    if (usingR2()) {
+      await putText(`${blobPrefix}index.json`, JSON.stringify(items, null, 2));
+      return;
+    }
+
     if (usingBlob()) {
       const previous = await listBlobs();
       const fresh = await put(`${blobPrefix}${Date.now()}.json`, JSON.stringify(items, null, 2), {

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { listAccesses } from '@/lib/accesses';
 import { mergeCategories } from '@/lib/categories';
 import { adminConfigured, isAdmin } from '@/lib/auth';
+import { usingR2 } from '@/lib/r2';
 import { listVideos, usingBlob } from '@/lib/videos';
 import { AdminLogin } from './admin-login';
 import { AdminPanel } from './admin-panel';
@@ -54,7 +55,7 @@ ADMIN_SECRET=cualquier-texto-largo-y-aleatorio`}
         ) : authorized ? (
           <div className="grid gap-16">
             <AccessesPanel accesses={accesses} categories={categories} />
-            <AdminPanel videos={videos} useBlob={usingBlob()} />
+            <AdminPanel videos={videos} useBlob={usingBlob()} useR2={usingR2()} />
           </div>
         ) : (
           <AdminLogin />

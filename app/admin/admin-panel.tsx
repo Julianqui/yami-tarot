@@ -12,13 +12,51 @@ type Mode = 'file' | 'link' | 'material';
 const field =
   'mt-2 w-full rounded-xl border border-line bg-surface-2 px-3.5 py-2.5 font-sans text-[0.95rem] normal-case tracking-normal text-text outline-none transition focus:border-text';
 
-export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: boolean }) {
+export function AdminPanel({
+  videos,
+  useBlob,
+  useR2,
+}: {
+  videos: Video[];
+  useBlob: boolean;
+  useR2: boolean;
+}) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const [mode, setMode] = useState<Mode>('file');
   const [progress, setProgress] = useState<number | null>(null);
   const [message, setMessage] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  /** Sube un archivo directo a R2 con una URL firmada, mostrando el progreso. */
+  const uploadToR2 = (file: File, onProgress?: (value: number) => void) =>
+    new Promise<string>((resolve, reject) => {
+      fetch('/api/videos/sign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: file.name, contentType: file.type }),
+      })
+        .then(async (response) => {
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(data?.error ?? 'No se pudo preparar la subida.');
+
+          const request = new XMLHttpRequest();
+          request.open('PUT', data.uploadUrl);
+          request.setRequestHeader('Content-Type', file.type);
+          request.upload.addEventListener('progress', (e) => {
+            if (e.lengthComputable && onProgress) {
+              onProgress(Math.round((e.loaded / e.total) * 100));
+            }
+          });
+          request.addEventListener('load', () => {
+            if (request.status >= 200 && request.status < 300) resolve(data.publicUrl as string);
+            else reject(new Error(`R2 rechazó la subida (${request.status}).`));
+          });
+          request.addEventListener('error', () => reject(new Error('Se cortó la subida.')));
+          request.send(file);
+        })
+        .catch(reject);
+    });
 
   /** En Vercel el archivo va directo a Blob desde el navegador. */
   const submitToBlob = async (form: HTMLFormElement) => {
@@ -37,21 +75,29 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
         if (!(file instanceof File) || file.size === 0) {
           throw new Error(mode === 'material' ? 'Elegí un PDF o una imagen.' : 'Elegí un archivo de video.');
         }
-        const uploaded = await upload(file.name, file, {
-          access: 'public',
-          handleUploadUrl: '/api/videos/upload-token',
-          multipart: file.size > 50 * 1024 * 1024,
-          onUploadProgress: ({ percentage }) => setProgress(Math.round(percentage)),
-        });
-        blobUrl = uploaded.url;
+        if (useR2) {
+          blobUrl = await uploadToR2(file, setProgress);
+        } else {
+          const uploaded = await upload(file.name, file, {
+            access: 'public',
+            handleUploadUrl: '/api/videos/upload-token',
+            multipart: file.size > 50 * 1024 * 1024,
+            onUploadProgress: ({ percentage }) => setProgress(Math.round(percentage)),
+          });
+          blobUrl = uploaded.url;
+        }
       }
 
       if (posterFile instanceof File && posterFile.size > 0) {
-        const uploadedPoster = await upload(posterFile.name, posterFile, {
-          access: 'public',
-          handleUploadUrl: '/api/videos/upload-token',
-        });
-        posterUrl = uploadedPoster.url;
+        if (useR2) {
+          posterUrl = await uploadToR2(posterFile);
+        } else {
+          const uploadedPoster = await upload(posterFile.name, posterFile, {
+            access: 'public',
+            handleUploadUrl: '/api/videos/upload-token',
+          });
+          posterUrl = uploadedPoster.url;
+        }
       }
 
       const response = await fetch('/api/videos', {
@@ -124,7 +170,7 @@ export function AdminPanel({ videos, useBlob }: { videos: Video[]; useBlob: bool
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
-    if (useBlob) void submitToBlob(form);
+    if (useR2 || useBlob) void submitToBlob(form);
     else submitToDisk(form);
   };
 
