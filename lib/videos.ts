@@ -35,9 +35,13 @@ export function isMaterial(item: Video): boolean {
   return item.kind === 'material';
 }
 
+/**
+ * Orden cronológico: lo primero que subió Yami queda arriba y lo nuevo se
+ * agrega abajo, que es como se siguen las clases de un curso.
+ */
 export async function listVideos(): Promise<Video[]> {
   const videos = await store.read();
-  return videos.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  return videos.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 }
 
 export async function addVideo(video: Omit<Video, 'id' | 'createdAt'>): Promise<Video> {
