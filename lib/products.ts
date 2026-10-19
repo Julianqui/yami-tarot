@@ -25,7 +25,7 @@ export const products: Product[] = [
     tagline: 'Tres dudas concretas, tres respuestas',
     description:
       'Hacés tres preguntas puntuales y Yami te responde con una tirada para cada una, en video privado dentro de las 48 h.',
-    price: 9000,
+    price: 12000,
     meta: 'Video privado · 48 h',
     highlights: ['3 preguntas', 'Audio + video', 'Respuesta en 48 h'],
   },
