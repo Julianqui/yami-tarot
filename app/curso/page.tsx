@@ -31,6 +31,10 @@ const modules = [
     title: 'Leer para otras personas',
     body: 'El encuadre de una consulta: qué preguntar, qué no prometer y cómo cerrar la sesión.',
   },
+  {
+    title: 'Clases grabadas + material en PDF',
+    body: 'Hacelo a tu ritmo: todas las clases quedan grabadas y vienen con material descargable para repasar cuando quieras.',
+  },
 ];
 
 export default function CursoPage() {
@@ -113,12 +117,6 @@ export default function CursoPage() {
             ))}
           </ol>
 
-          <div className="slot mt-6 p-6 pt-12" data-note="Detalles del curso — confirmar con Yami">
-            <p className="note">
-              Falta definir: cuántas clases son, cuánto dura cada una, si hay encuentros en vivo o
-              es todo grabado, y si entrega certificado.
-            </p>
-          </div>
         </section>
 
         <div className="card mt-16 flex flex-wrap items-center justify-between gap-6 p-8">

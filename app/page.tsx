@@ -7,7 +7,7 @@ import { Hero } from './components/hero';
 import { Process } from './components/process';
 import { Services } from './components/services';
 import { VideosTeaser } from './components/videos-teaser';
-import { Voices } from './components/voices';
+
 
 export default async function HomePage() {
   const portrait = await portraitSrc();
@@ -21,7 +21,7 @@ export default async function HomePage() {
       <Services />
       <Process />
       <VideosTeaser />
-      <Voices />
+
       <Faq />
     </>
   );

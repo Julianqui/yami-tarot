@@ -2,7 +2,11 @@
 import { ArcanaCard } from './arcana-card';
 import { Reveal } from './reveal';
 
-const facts = ['Sesiones por videollamada', 'Video privado en 48 h', 'Mercado Pago o PayPal'];
+const facts = [
+  { text: 'Sesiones por videollamada', color: 'var(--color-teal)' },
+  { text: 'Video privado en 48 h', color: 'var(--color-teal)' },
+  { text: 'Mercado Pago o PayPal', color: 'var(--color-teal)' },
+];
 
 export function Hero({ portrait }: { portrait: string | null }) {
   return (
@@ -52,9 +56,13 @@ export function Hero({ portrait }: { portrait: string | null }) {
 
             <Reveal delay={0.24}>
               <ul className="mt-10 flex flex-wrap gap-2">
-                {facts.map((fact) => (
-                  <li key={fact} className="chip">
-                    {fact}
+                {facts.map((f) => (
+                  <li
+                    key={f.text}
+                    className="chip"
+                    style={{ color: f.color, borderColor: `color-mix(in oklab, ${f.color} 35%, transparent)` }}
+                  >
+                    {f.text}
                   </li>
                 ))}
               </ul>
