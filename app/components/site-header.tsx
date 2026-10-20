@@ -1,6 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -22,8 +23,19 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-line/80 bg-night/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-[min(1200px,92vw)] items-center justify-between gap-6">
-        <Link href="/" className="text-[1.05rem] font-medium tracking-[-0.02em]">
-          Yami Tarot
+        <Link href="/" className="flex items-center gap-2">
+          <div className="h-10 w-10 overflow-hidden rounded-full">
+            <Image
+              src="/logo.jpg"
+              alt="Yamila Tarot"
+              width={80}
+              height={80}
+              className="h-[170%] w-full object-cover object-top"
+            />
+          </div>
+          <span className="bg-gradient-to-r from-[#9b7ec8] via-[#c4a6e8] to-[#8b6bb5] bg-clip-text text-[1.05rem] font-medium tracking-[-0.02em] text-transparent">
+            Yamila Tarot
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
