@@ -6,7 +6,7 @@ const facts = ['Sesiones por videollamada', 'Video privado en 48 h', 'Mercado Pa
 
 export function Hero({ portrait }: { portrait: string | null }) {
   return (
-    <section id="inicio" className="relative overflow-hidden">
+    <section id="inicio" className="relative min-h-svh overflow-hidden">
       {/* Halos de color: tiñen el fondo sin moverse ni brillar de más. */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="aura -left-32 -top-40 h-[32rem] w-[32rem] bg-amethyst/40" />
@@ -14,7 +14,7 @@ export function Hero({ portrait }: { portrait: string | null }) {
         <div className="aura left-1/3 top-[28rem] h-[22rem] w-[22rem] bg-rose/20" />
       </div>
 
-      <div className="relative mx-auto w-[min(1200px,92vw)] pb-24 pt-14 sm:pb-32 sm:pt-20">
+      <div className="relative mx-auto flex min-h-svh w-[min(1200px,92vw)] flex-col justify-center pb-24 pt-14 sm:pb-32 sm:pt-20">
         <div className="grid items-center gap-14 lg:grid-cols-[1.15fr_0.85fr]">
           <div>
             <Reveal>

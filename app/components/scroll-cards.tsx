@@ -63,7 +63,10 @@ export function ScrollCards() {
     return () => window.removeEventListener('scroll', update);
   }, []);
 
-  const flip = progress * 180;
+  const dead = 0.25;
+  const flipEnd = 0.65;
+  const t = Math.max(0, Math.min(1, (progress - dead) / (flipEnd - dead)));
+  const flip = t * 180;
 
   return (
     <div ref={ref} className="relative mx-auto w-[min(1200px,92vw)] py-16">
