@@ -1,5 +1,6 @@
 import { portraitSrc } from '@/lib/assets';
 import { About } from './components/about';
+import { ScrollCards } from './components/scroll-cards';
 import { ArcanasSection } from './components/arcanas-section';
 import { Faq } from './components/faq';
 import { Hero } from './components/hero';
@@ -14,6 +15,7 @@ export default async function HomePage() {
   return (
     <>
       <Hero portrait={portrait} />
+      <ScrollCards />
       <About />
       <ArcanasSection />
       <Services />
