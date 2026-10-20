@@ -29,11 +29,6 @@ export function ArcanasSection() {
             </Reveal>
           ))}
         </ul>
-
-        <p className="note mt-8">
-          Las ilustraciones están dibujadas para el sitio. Si Yami prefiere, se reemplazan por
-          fotos de su propio mazo.
-        </p>
       </div>
     </section>
   );
