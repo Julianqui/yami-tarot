@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { listAccesses } from '@/lib/accesses';
 import { mergeCategories } from '@/lib/categories';
 import { adminConfigured, isAdmin } from '@/lib/auth';
+import { canStoreCredentials } from '@/lib/admin-credentials';
 import { usingR2 } from '@/lib/r2';
 import { listVideos, usingBlob } from '@/lib/videos';
 import { AdminLogin } from './admin-login';
@@ -62,6 +63,23 @@ ADMIN_SECRET=cualquier-texto-largo-y-aleatorio`}
           <div className="grid gap-16">
             <AccessesPanel accesses={accesses} categories={categories} />
             <AdminPanel videos={videos} useBlob={usingBlob()} useR2={usingR2()} />
+
+            <section>
+              <h2 className="h-section border-b border-line pb-4 text-[1.7rem]">Contraseña</h2>
+              <div className="card mt-6 flex flex-wrap items-center justify-between gap-4 p-6">
+                <p className="max-w-[48ch] text-[0.95rem] leading-[1.6] text-muted">
+                  {canStoreCredentials()
+                    ? 'Si querés cambiar la contraseña con la que entrás acá, hacelo desde este botón. Al cambiarla se cierran las sesiones abiertas en otros dispositivos.'
+                    : 'Falta definir ADMIN_SECRET en las variables de entorno para poder guardar una contraseña nueva.'}
+                </p>
+                <Link
+                  href="/admin/contrasena"
+                  className={`btn ${canStoreCredentials() ? 'btn-primary' : 'btn-ghost'}`}
+                >
+                  Cambiar contraseña
+                </Link>
+              </div>
+            </section>
           </div>
         ) : (
           <AdminLogin />
