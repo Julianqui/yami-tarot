@@ -86,21 +86,35 @@ async function write(credential: Credential): Promise<void> {
 }
 
 function matchesEnv(candidate: string): boolean {
-  const password = process.env.ADMIN_PASSWORD;
-  if (!password) return false;
+  const passwords = [process.env.ADMIN_PASSWORD, process.env.ADMIN_PASSWORD_2].filter(Boolean) as string[];
+  if (passwords.length === 0) return false;
   const a = Buffer.from(candidate);
-  const b = Buffer.from(password);
-  return a.length === b.length && crypto.timingSafeEqual(a, b);
+  return passwords.some((pw) => {
+    const b = Buffer.from(pw);
+    return a.length === b.length && crypto.timingSafeEqual(a, b);
+  });
 }
 
-/** Valida contra la contraseña guardada; si no hay ninguna, contra la del entorno. */
-export async function verifyPassword(candidate: string): Promise<boolean> {
+/** Valida solo contra la contraseña guardada (la de la cuenta principal). */
+export async function verifyStoredPassword(candidate: string): Promise<boolean> {
   const stored = await read();
   if (!stored) return matchesEnv(candidate);
-
   const attempt = Buffer.from(derive(candidate, stored.salt), 'hex');
   const expected = Buffer.from(stored.hash, 'hex');
   return attempt.length === expected.length && crypto.timingSafeEqual(attempt, expected);
+}
+
+/** Valida contra la contraseña guardada y contra las del entorno. */
+export async function verifyPassword(candidate: string): Promise<boolean> {
+  const stored = await read();
+  if (stored) {
+    const attempt = Buffer.from(derive(candidate, stored.salt), 'hex');
+    const expected = Buffer.from(stored.hash, 'hex');
+    if (attempt.length === expected.length && crypto.timingSafeEqual(attempt, expected)) {
+      return true;
+    }
+  }
+  return matchesEnv(candidate);
 }
 
 export async function savePassword(next: string): Promise<void> {

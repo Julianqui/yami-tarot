@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ADMIN_COOKIE, isAdmin, sessionToken } from '@/lib/auth';
-import { canStoreCredentials, savePassword, verifyPassword } from '@/lib/admin-credentials';
+import { canStoreCredentials, savePassword, verifyStoredPassword } from '@/lib/admin-credentials';
 
 export const runtime = 'nodejs';
 
@@ -25,8 +25,11 @@ export async function POST(request: Request) {
   const current = String(body.current ?? '');
   const next = String(body.next ?? '');
 
-  if (!(await verifyPassword(current))) {
-    return NextResponse.json({ error: 'La contraseña actual no es correcta.' }, { status: 401 });
+  if (!(await verifyStoredPassword(current))) {
+    return NextResponse.json(
+      { error: 'Solo la cuenta principal puede cambiar la contraseña.' },
+      { status: 403 },
+    );
   }
   if (next.length < 8) {
     return NextResponse.json(
