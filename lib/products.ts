@@ -14,6 +14,10 @@ export type Product = {
   featured?: boolean;
   /** Si tiene página propia con más detalle. */
   detailUrl?: string;
+  /** Precio promocional. Vence solo en promoUntil; después vuelve el precio normal. */
+  promoPrice?: number;
+  /** Fecha y hora de corte, con huso horario argentino. */
+  promoUntil?: string;
 };
 
 export const CURRENCY = 'ARS';
@@ -47,6 +51,8 @@ export const products: Product[] = [
     description:
       'Formación desde cero sobre los 78 arcanos: los 22 mayores y los 56 menores, cómo armar una tirada y cómo interpretarla sin miedo.',
     price: 65000,
+    promoPrice: 52000,
+    promoUntil: '2026-10-22T23:59:00-03:00',
     meta: 'Online · clases grabadas',
     highlights: ['Desde cero', 'Material incluido', 'Acceso a los videos'],
     detailUrl: '/curso',
@@ -85,4 +91,15 @@ export const products: Product[] = [
 
 export function findProduct(id: string): Product | undefined {
   return products.find((p) => p.id === id);
+}
+
+/**
+ * Promoción vigente, o null si ya venció. Las páginas que la muestran se
+ * regeneran cada pocos minutos, así el cartel desaparece solo.
+ */
+export function activePromo(product: Product): { price: number; until: Date } | null {
+  if (!product.promoPrice || !product.promoUntil) return null;
+  const until = new Date(product.promoUntil);
+  if (Number.isNaN(until.getTime()) || until.getTime() <= Date.now()) return null;
+  return { price: product.promoPrice, until };
 }

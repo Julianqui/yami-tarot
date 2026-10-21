@@ -1,8 +1,12 @@
 import Link from 'next/link';
 import { money } from '@/lib/format';
-import { findProduct } from '@/lib/products';
+import { activePromo, findProduct } from '@/lib/products';
 import { ArcanaCard } from '../components/arcana-card';
+import { PromoBadge } from '../components/promo-badge';
 import { Reveal } from '../components/reveal';
+
+/** La promo vence sola: regeneramos la página cada 5 minutos. */
+export const revalidate = 300;
 
 export const metadata = {
   title: 'Curso de Tarot · Yami Tarot',
@@ -39,6 +43,7 @@ const modules = [
 
 export default function CursoPage() {
   const course = findProduct('curso-tarot');
+  const promo = course ? activePromo(course) : null;
 
   return (
     <div className="relative overflow-hidden">
@@ -72,7 +77,14 @@ export default function CursoPage() {
               <Link href="/comprar/curso-tarot" className="btn btn-primary">
                 Comprar el curso
               </Link>
-              {course ? (
+              {course && promo ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-[1.2rem] text-muted line-through">
+                    {money(course.price)}
+                  </span>
+                  <PromoBadge price={promo.price} until={promo.until} size="lg" />
+                </div>
+              ) : course ? (
                 <span className="h-section gilded text-[1.9rem]">{money(course.price)}</span>
               ) : null}
             </div>

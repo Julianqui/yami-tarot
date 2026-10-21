@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { money } from '@/lib/format';
-import { products } from '@/lib/products';
+import { activePromo, products } from '@/lib/products';
+import { PromoBadge } from './promo-badge';
 import { Reveal, SectionHead } from './reveal';
 
 /** Un color por servicio, para que la grilla no sea una pared gris. */
@@ -16,7 +17,9 @@ export function Services() {
       />
 
       <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {products.map((product, index) => (
+        {products.map((product, index) => {
+          const promo = activePromo(product);
+          return (
           <Reveal key={product.id} delay={Math.min(index, 5) * 0.05} className="h-full">
             <article className="card card-hover relative flex h-full flex-col overflow-hidden p-6">
               <span
@@ -68,15 +71,25 @@ export function Services() {
                 </Link>
               ) : null}
 
-              <div className="relative mt-auto flex items-end justify-between gap-4 pt-7">
-                <span className="h-section gilded text-[1.9rem]">{money(product.price)}</span>
+              <div className="relative mt-auto flex flex-wrap items-end justify-between gap-4 pt-7">
+                {promo ? (
+                  <div className="flex flex-col gap-2">
+                    <span className="text-[1.05rem] text-muted line-through">
+                      {money(product.price)}
+                    </span>
+                    <PromoBadge price={promo.price} until={promo.until} />
+                  </div>
+                ) : (
+                  <span className="h-section gilded text-[1.9rem]">{money(product.price)}</span>
+                )}
                 <Link href={`/comprar/${product.id}`} className="btn btn-primary">
                   Comprar
                 </Link>
               </div>
             </article>
           </Reveal>
-        ))}
+          );
+        })}
       </div>
 
     </section>

@@ -1,9 +1,13 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { money } from '@/lib/format';
-import { findProduct, products } from '@/lib/products';
+import { activePromo, findProduct, products } from '@/lib/products';
 import { paypalLink, site, whatsappLink } from '@/lib/site';
+import { PromoBadge } from '@/app/components/promo-badge';
 import { CopyAlias } from './copy-alias';
+
+/** La promo vence sola: regeneramos la página cada 5 minutos. */
+export const revalidate = 300;
 
 export function generateStaticParams() {
   return products.map((product) => ({ servicio: product.id }));
@@ -21,6 +25,7 @@ export default async function ComprarPage({ params }: { params: Promise<{ servic
   const { servicio } = await params;
   const product = findProduct(servicio);
   if (!product) notFound();
+  const promo = activePromo(product);
 
   const steps = [
     {
@@ -58,9 +63,18 @@ export default async function ComprarPage({ params }: { params: Promise<{ servic
 
           <div className="mt-8 border-t border-line pt-8">
             <p className="mono">Total</p>
-            <p className="h-display gilded mt-2 text-[clamp(2.4rem,7vw,3.6rem)]">
-              {money(product.price)}
-            </p>
+            {promo ? (
+              <div className="mt-2 flex flex-wrap items-center gap-4">
+                <span className="h-display text-[clamp(1.6rem,4vw,2.2rem)] text-muted line-through">
+                  {money(product.price)}
+                </span>
+                <PromoBadge price={promo.price} until={promo.until} size="lg" />
+              </div>
+            ) : (
+              <p className="h-display gilded mt-2 text-[clamp(2.4rem,7vw,3.6rem)]">
+                {money(product.price)}
+              </p>
+            )}
 
             <div className="mt-7 grid gap-4 sm:grid-cols-2">
               <CopyAlias alias={site.alias} />
