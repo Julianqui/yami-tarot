@@ -1,9 +1,15 @@
+import { site } from '@/lib/site';
+import { AliasChip } from './alias-chip';
 import { Reveal, SectionHead } from './reveal';
 
 const steps = [
-  { title: 'Elegís', text: 'Mirás los servicios y agregás al carrito el que necesitás.' },
-  { title: 'Pagás', text: 'Checkout de Mercado Pago: tarjeta, débito, transferencia o efectivo.' },
-  { title: 'Coordinan', text: 'Yami te escribe con los horarios disponibles y reservan el turno.' },
+  { title: 'Elegís', text: 'Mirás los servicios y entrás al que necesitás.' },
+  {
+    title: 'Pagás',
+    text: 'Transferís al alias de Mercado Pago de Yami, desde cualquier banco o billetera.',
+    alias: true,
+  },
+  { title: 'Avisás', text: 'Le mandás el comprobante por WhatsApp y te confirma.' },
   { title: 'La sesión', text: 'En vivo por videollamada o grabada en video, según el servicio.' },
 ];
 
@@ -21,6 +27,7 @@ export function Process() {
               </span>
               <h3 className="h-section mt-5 text-[1.45rem]">{step.title}</h3>
               <p className="mt-2 text-[0.94rem] leading-[1.6] text-muted">{step.text}</p>
+              {step.alias ? <AliasChip alias={site.alias} /> : null}
             </div>
           </Reveal>
         ))}
