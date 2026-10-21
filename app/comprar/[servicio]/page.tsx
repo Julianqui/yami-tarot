@@ -6,9 +6,6 @@ import { paypalLink, site, whatsappLink } from '@/lib/site';
 import { PromoBadge } from '@/app/components/promo-badge';
 import { CopyAlias } from './copy-alias';
 
-/** La promo vence sola: regeneramos la página cada 5 minutos. */
-export const revalidate = 300;
-
 export function generateStaticParams() {
   return products.map((product) => ({ servicio: product.id }));
 }
@@ -68,7 +65,7 @@ export default async function ComprarPage({ params }: { params: Promise<{ servic
                 <span className="h-display text-[clamp(1.6rem,4vw,2.2rem)] text-muted line-through">
                   {money(product.price)}
                 </span>
-                <PromoBadge price={promo.price} until={promo.until} size="lg" />
+                <PromoBadge price={promo.price} note={promo.note} size="lg" />
               </div>
             ) : (
               <p className="h-display gilded mt-2 text-[clamp(2.4rem,7vw,3.6rem)]">

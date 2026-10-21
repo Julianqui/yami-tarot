@@ -77,7 +77,7 @@ export function Services() {
                     <span className="text-[1.05rem] text-muted line-through">
                       {money(product.price)}
                     </span>
-                    <PromoBadge price={promo.price} until={promo.until} />
+                    <PromoBadge price={promo.price} note={promo.note} />
                   </div>
                 ) : (
                   <span className="h-section gilded text-[1.9rem]">{money(product.price)}</span>

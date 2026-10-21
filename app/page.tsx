@@ -8,10 +8,6 @@ import { Process } from './components/process';
 import { Services } from './components/services';
 import { VideosTeaser } from './components/videos-teaser';
 
-
-/** La promo vence sola: regeneramos la página cada 5 minutos. */
-export const revalidate = 300;
-
 export default async function HomePage() {
   const portrait = await portraitSrc();
 

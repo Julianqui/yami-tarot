@@ -5,9 +5,6 @@ import { ArcanaCard } from '../components/arcana-card';
 import { PromoBadge } from '../components/promo-badge';
 import { Reveal } from '../components/reveal';
 
-/** La promo vence sola: regeneramos la página cada 5 minutos. */
-export const revalidate = 300;
-
 export const metadata = {
   title: 'Curso de Tarot · Yami Tarot',
   description:
@@ -82,7 +79,7 @@ export default function CursoPage() {
                   <span className="text-[1.2rem] text-muted line-through">
                     {money(course.price)}
                   </span>
-                  <PromoBadge price={promo.price} until={promo.until} size="lg" />
+                  <PromoBadge price={promo.price} note={promo.note} size="lg" />
                 </div>
               ) : course ? (
                 <span className="h-section gilded text-[1.9rem]">{money(course.price)}</span>
